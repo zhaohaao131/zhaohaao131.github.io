@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>HaoAdmin</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="bootstrap.min.css">
+	<link rel="stylesheet" href="AdminLTE.min.css">
+	<script src="jquery-3.2.1.min.js"></script>
+	<script src="code.js"></script>
+</head>
+<body class="hold-transition login-page" style="overflow:-Scroll;overflow-y:hidden">
+<canvas id="matrixBG"  style="position:absolute;top:0px;left:0px;z-index:-1;"></canvas>
+<div class="login-box">
+  <div class="login-logo" style="margin-bottom: 0px;">
+    <a href="../../index2.html" style="color:white;"><b>Admin</b>LTE</a>
+  </div>
+  <div class="login-box-body" style="background:none">
+    <p class="login-box-msg"  style="color:white;">Sign in to start your session</p>
+      <div class="form-group has-feedback">
+        <input type="text" class="form-control" placeholder="Email" name="userName">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" class="form-control" placeholder="Password" name="password">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button type="submit" id="loginSubmit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+        </div>
+      </div>
+
+  </div>
+</div>
+<script>
+  $(function () {
+	  $("#loginSubmit").on("click",function(){
+		  var userName = $("input[name='userName']").val();
+		  var password = $("input[name='password']").val();
+		  var rememberMe = $("input[name='rememberMe']").is(':checked')?1:0;
+		  if(!userName){
+			  Pop.alert("请输入用户名！");
+			  return;
+		  }
+		  if(!password){
+			  Pop.alert("请输入密码！");
+			  return;
+		  }
+		  $.ajax({
+				type : 'POST',
+				url: ctxPath + "/user/login",
+				data : {
+					"userName":userName,
+					"password":password,
+					"rememberMe":rememberMe
+					},
+				dataType : "json",
+				success : function(data){
+					if (data.code == 0) {
+						location.href=ctxPath+"/index";
+					} else {
+						if (data.msg) {
+							Pop.alert(data.msg);
+						} else {
+							Pop.alert('登陆异常');
+						}
+					}
+				},
+			});
+	  });
+	  
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue',
+      increaseArea: '20%' // optional
+    });
+  });
+</script>
+</body>
+</html>
